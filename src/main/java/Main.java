@@ -15,6 +15,9 @@ public class Main {
 
     private static void Menu(Aplicacao aplicacao, Scanner input) {
         boolean continua = true;
+        System.out.println("----------------------------------\n" +
+                "Bem vindo ao sistema do Banco XPTO\n" +
+                "----------------------------------");
         while (continua){
             switch (opcMenu(input)){
                 case 1:
@@ -31,7 +34,7 @@ public class Main {
                     var usuario2 = aplicacao.getUsuarioView().getUsuario(input);
                     System.out.println("Escolha a conta para depositar.");
                     for(int i = 0; i < usuario2.getContas().size(); i++){
-                        System.out.printf("%d - Conta: %d", i+1 , usuario2.getContas().get(i).getNumeroConta());
+                        System.out.printf("%d - Conta: %d\n", i+1 , usuario2.getContas().get(i).getNumeroConta());
                     }
                     int n = input.nextInt();
                     var conta = usuario2.getContas().get(n-1);
@@ -44,7 +47,7 @@ public class Main {
                     var usuario3 = aplicacao.getUsuarioView().getUsuario(input);
                     System.out.println("Escolha a conta para sacar.");
                     for(int i = 0; i < usuario3.getContas().size(); i++){
-                        System.out.printf("%d - Conta: %d", i+1 , usuario3.getContas().get(i).getNumeroConta());
+                        System.out.printf("%d - Conta: %d\n", i+1 , usuario3.getContas().get(i).getNumeroConta());
                     }
                     int x = input.nextInt();
                     var conta2 = usuario3.getContas().get(x-1);
@@ -61,8 +64,7 @@ public class Main {
                     }
                     int y = input.nextInt();
                     var conta3 = usuario4.getContas().get(y-1);
-                    var saldo = aplicacao.getContaView().saldo(usuario4, conta3);
-                    System.out.println("O saldo da conta " + conta3.getNumeroConta() + " é R$" + saldo);
+                    aplicacao.getContaView().saldo(usuario4, conta3);
                     break;
                 case 0:
                     continua = false;
@@ -72,9 +74,6 @@ public class Main {
     }
 
     private static int opcMenu(Scanner input) {
-        System.out.println("----------------------------------\n" +
-                "Bem vindo ao sistema do Banco XPTO\n" +
-                "----------------------------------");
         int opc;
         do {
 

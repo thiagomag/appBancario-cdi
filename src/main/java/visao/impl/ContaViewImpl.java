@@ -48,58 +48,51 @@ public class ContaViewImpl implements ContaView {
 
     @Override
     public void depositar(Usuario usuario, BigDecimal valor, Conta conta) throws ContaNaoExisteException {
-        for (int i = 0; i < usuario.getContas().size(); i++) {
-            if (usuario.getContas().get(i).getNumeroConta() == conta.getNumeroConta()) {
-                if (conta instanceof ContaEspecial) {
-                    BigDecimal saldo = ((ContaEspecial) conta).getSaldo().add(valor);
-                    ((ContaEspecial) conta).setSaldo(saldo);
-                } else if (conta instanceof ContaPoupanca) {
-                    BigDecimal saldo = ((ContaPoupanca) conta).getSaldo().add(valor);
-                    ((ContaPoupanca) conta).setSaldo(saldo);
-                } else if (conta instanceof ContaSimples) {
-                    BigDecimal saldo = ((ContaSimples) conta).getSaldo().add(valor);
-                    ((ContaSimples) conta).setSaldo(saldo);
-                }
-            } else {
-                throw new ContaNaoExisteException(usuario, conta);
-            }
+        if (conta instanceof ContaEspecial) {
+            contaViewFactory.create(ContaEnum.ESPECIAL).depositar(valor, conta);
+            System.out.printf("O valor depositado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaEspecial) conta).getSaldo());
+        } else if (conta instanceof ContaPoupanca) {
+            contaViewFactory.create(ContaEnum.POUPANCA).depositar(valor, conta);
+            System.out.printf("O valor depositado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaPoupanca) conta).getSaldo());
+        } else if (conta instanceof ContaSimples) {
+            contaViewFactory.create(ContaEnum.SIMPLES).depositar(valor, conta);
+            System.out.printf("O valor depositado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaSimples) conta).getSaldo());
         }
     }
+
 
     @Override
     public void saque(Usuario usuario, BigDecimal valor, Conta conta) {
-        for (int i = 0; i < usuario.getContas().size(); i++) {
-            if (usuario.getContas().get(i).getNumeroConta() == conta.getNumeroConta()) {
-                if (conta instanceof ContaEspecial) {
-                    BigDecimal saldo = ((ContaEspecial) conta).getSaldo().subtract(valor);
-                    ((ContaEspecial) conta).setSaldo(saldo);
-                } else if (conta instanceof ContaPoupanca) {
-                    BigDecimal saldo = ((ContaPoupanca) conta).getSaldo().subtract(valor);
-                    ((ContaPoupanca) conta).setSaldo(saldo);
-                } else if (conta instanceof ContaSimples) {
-                    BigDecimal saldo = ((ContaSimples) conta).getSaldo().subtract(valor);
-                    ((ContaSimples) conta).setSaldo(saldo);
-                }
-            } else {
-                throw new ContaNaoExisteException(usuario, conta);
-            }
+        if (conta instanceof ContaEspecial) {
+            contaViewFactory.create(ContaEnum.ESPECIAL).sacar(valor, conta);
+            System.out.printf("O valor sacado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaEspecial) conta).getSaldo());
+        } else if (conta instanceof ContaPoupanca) {
+            contaViewFactory.create(ContaEnum.POUPANCA).sacar(valor, conta);
+            System.out.printf("O valor sacado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaPoupanca) conta).getSaldo());
+        } else if (conta instanceof ContaSimples) {
+            contaViewFactory.create(ContaEnum.SIMPLES).sacar(valor, conta);
+            System.out.printf("O valor sacado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaSimples) conta).getSaldo());
         }
     }
 
     @Override
-    public BigDecimal saldo(Usuario usuario, Conta conta) {
-        BigDecimal saldo = null;
+    public void saldo(Usuario usuario, Conta conta) {
+        BigDecimal saldo;
         if (conta instanceof ContaEspecial) {
-            ContaEspecial contaEspecial = (ContaEspecial) conta;
-            saldo = contaEspecial.getSaldo();
+            saldo = contaViewFactory.create(ContaEnum.ESPECIAL).saldo(conta);
+            BigDecimal limite = new BigDecimal(200);
+            if (saldo.compareTo(limite) > 0) {
+                System.out.printf("O saldo da conta %d é R$ %.2f e o limite é R$ %.2f", conta.getNumeroConta(), saldo.subtract(limite), limite);
+            } else {
+                System.out.printf("O saldo da conta %d é R$ 0,00 e o limite é R$ %.2f", conta.getNumeroConta(), limite);
+            }
         } else if (conta instanceof ContaPoupanca) {
-            ContaPoupanca contaPoupanca = (ContaPoupanca) conta;
-            saldo = contaPoupanca.getSaldo();
+            saldo = contaViewFactory.create(ContaEnum.POUPANCA).saldo(conta);
+            System.out.printf("O saldo da conta %d é R$ %.2f", conta.getNumeroConta(), saldo);
         } else if (conta instanceof ContaSimples) {
-            ContaSimples contaSimples = (ContaSimples) conta;
-            saldo = contaSimples.getSaldo();
+            saldo = contaViewFactory.create(ContaEnum.SIMPLES).saldo(conta);
+            System.out.printf("O saldo da conta %d é R$ %.2f", conta.getNumeroConta(), saldo);
         }
-        return saldo;
     }
 }
 
