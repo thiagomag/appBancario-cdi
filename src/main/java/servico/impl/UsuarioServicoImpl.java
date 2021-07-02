@@ -8,7 +8,7 @@ import servico.UsuarioService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+import java.io.IOException;
 
 
 @Data
@@ -20,13 +20,13 @@ public class UsuarioServicoImpl implements UsuarioService {
     UsuarioDao usuarioDao;
 
     @Override
-    public void criarUsuario(Usuario usuario) {
-        usuarioDao.escreverArquivo(usuario);
+    public Usuario criarUsuario(String nome, int idade) {
+        return new Usuario(nome, idade);
     }
 
     @Override
-    public Usuario consultarUsuario(String nome) {
-        for (Usuario usuario : usuarioDao.lerArquivo()) {
+    public Usuario consultarUsuario(String nome) throws IOException {
+        for (Usuario usuario : usuarioDao.lerArquivo(nome)) {
             if (usuario.getNome().equals(nome)){
                 return usuario;
             } else {
@@ -37,7 +37,7 @@ public class UsuarioServicoImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> retornarLista() {
-        return usuarioDao.lerArquivo();
+    public void escreverArquivo(Usuario usuario) throws IOException {
+        usuarioDao.escreverArquivo(usuario);
     }
 }

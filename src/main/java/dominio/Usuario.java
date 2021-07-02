@@ -24,4 +24,10 @@ public class Usuario {
     public void setContas(Conta conta) {
         contas.add(conta);
     }
+
+    @Override
+    public String toString() {
+        return nome + "\n" +
+               idade;
+    }
 }

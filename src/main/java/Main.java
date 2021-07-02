@@ -1,11 +1,11 @@
-import exceptions.UsuarioNaoExisteException;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         final WeldContainer container = new Weld().initialize();
         final Aplicacao aplicacao = container.select(Aplicacao.class).get();
@@ -13,7 +13,7 @@ public class Main {
         Menu(aplicacao, input);
     }
 
-    private static void Menu(Aplicacao aplicacao, Scanner input) {
+    private static void Menu(Aplicacao aplicacao, Scanner input) throws IOException {
         boolean continua = true;
         System.out.println("----------------------------------\n" +
                 "Bem vindo ao sistema do Banco XPTO\n" +
@@ -23,11 +23,13 @@ public class Main {
                 case 1:
                     var usuario = aplicacao.getUsuarioView().CriarUsuario(input);
                     aplicacao.getContaView().criaConta(usuario);
+                    aplicacao.getUsuarioView().escreverArquivo(usuario);
                     break;
                 case 2:
                     System.out.println("Informe o usuário que a conta será criada.");
                     var usuario1 = aplicacao.getUsuarioView().getUsuario(input);
                     aplicacao.getContaView().criaConta(usuario1);
+                    aplicacao.getUsuarioView().escreverArquivo(usuario1);
                     break;
                 case 3:
                     System.out.println("Informe o usuário da conta que receberá o depósito.");

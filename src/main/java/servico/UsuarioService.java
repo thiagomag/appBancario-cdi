@@ -1,12 +1,14 @@
 package servico;
 
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import dominio.Usuario;
 
-import java.util.List;
+import java.io.IOException;
 
 
 public interface UsuarioService {
-    void criarUsuario(Usuario usuario);
-    Usuario consultarUsuario(String nome);
-    List<Usuario> retornarLista();
+    Usuario criarUsuario(String nome, int idade);
+    Usuario consultarUsuario(String nome) throws IOException;
+    void escreverArquivo(Usuario usuario) throws IOException;
 }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class ContaEspecial extends Conta{
 
-    private final int variacao = 10;
+    private int variacao = 10;
     private BigDecimal saldo = new BigDecimal(200);
 
     @Override
@@ -20,5 +20,14 @@ public class ContaEspecial extends Conta{
     @Override
     public String getAgencia() {
         return super.getAgencia();
+    }
+
+    @Override
+    public String toString() {
+        return "ContaEspecial\n" +
+                agencia + "\n" +
+                numeroConta + "\n" +
+                variacao + "\n" +
+                saldo;
     }
 }

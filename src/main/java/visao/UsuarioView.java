@@ -2,11 +2,11 @@ package visao;
 
 import dominio.Usuario;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Scanner;
 
 public interface UsuarioView {
     Usuario CriarUsuario(Scanner input);
-    Usuario getUsuario(Scanner input);
-    List<Usuario> retornarLista();
+    Usuario getUsuario(Scanner input) throws IOException;
+    void escreverArquivo(Usuario usuario) throws IOException;
 }
