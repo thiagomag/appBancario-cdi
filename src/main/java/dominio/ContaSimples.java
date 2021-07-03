@@ -1,5 +1,6 @@
 package dominio;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,9 +10,9 @@ import java.math.BigDecimal;
 @Data
 public class ContaSimples extends Conta {
 
-    private int variacao = 1;
-    private BigDecimal saldo = new BigDecimal(0);
-    private String tipoConta = "Conta Simples";
+    protected int variacao = 1;
+    protected BigDecimal saldo = new BigDecimal(0);
+    protected String tipoConta = "Conta Simples";
 
 
     @Override

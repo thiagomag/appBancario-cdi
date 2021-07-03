@@ -22,9 +22,11 @@ public class UsuarioViewImpl implements UsuarioView {
         System.out.println("Informe o nome do novo usuário");
         input.nextLine();
         String nome = input.nextLine();
+        System.out.println("Informe sua senha");
+        String senha = input.nextLine();
         System.out.println("Informa a idade do usuário");
         int idade = input.nextInt();
-        Usuario usuario = usuarioService.criarUsuario(nome, idade);
+        Usuario usuario = usuarioService.criarUsuario(nome, senha, idade);
         System.out.printf("O usuario criado foi: %s , %d anos\n", usuario.getNome(), usuario.getIdade());
         return usuario;
     }
@@ -33,7 +35,9 @@ public class UsuarioViewImpl implements UsuarioView {
     public Usuario getUsuario(Scanner input) throws IOException {
         input.nextLine();
         String nome = input.nextLine();
-        return usuarioService.consultarUsuario(nome);
+        System.out.println("Informe sua senha:");
+        String senha = input.nextLine();
+        return usuarioService.consultarUsuario(nome, senha);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class UsuarioViewImpl implements UsuarioView {
                     Thread.sleep(3000);
                     break;
                 case 3:
-                    System.out.println("Informe o usuário da conta que receberá o depósito.");
+                    System.out.println("Informe o usuário da conta que receberá o depósito:");
                     usuario = aplicacao.getUsuarioView().getUsuario(input);
                     System.out.println("Escolha a conta para depositar.");
                     for (int i = 0; i < usuario.getContas().size(); i++) {

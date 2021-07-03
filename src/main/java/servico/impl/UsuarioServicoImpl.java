@@ -15,19 +15,18 @@ import java.io.IOException;
 @Named
 public class UsuarioServicoImpl implements UsuarioService {
 
-
     @Inject
     AplicacaoDao aplicacaoDao;
 
     @Override
-    public Usuario criarUsuario(String nome, int idade) {
-        return new Usuario(nome, idade);
+    public Usuario criarUsuario(String nome, String senha, int idade) {
+        return new Usuario(nome, senha, idade);
     }
 
     @Override
-    public Usuario consultarUsuario(String nome) throws IOException {
+    public Usuario consultarUsuario(String nome, String senha) throws IOException {
         for (Usuario usuario : aplicacaoDao.lerArquivo(nome)) {
-            if (usuario.getNome().equals(nome)) {
+            if (usuario.getNome().equals(nome) && usuario.getSenha().equals(senha)) {
                 return usuario;
             } else {
                 throw new UsuarioNaoExisteException();

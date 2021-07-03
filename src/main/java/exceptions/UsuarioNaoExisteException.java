@@ -3,6 +3,6 @@ package exceptions;
 public class UsuarioNaoExisteException extends RuntimeException{
 
     public UsuarioNaoExisteException() {
-        super("Usuário não existe");
+        super("Usuário ou senha não existem");
     }
 }

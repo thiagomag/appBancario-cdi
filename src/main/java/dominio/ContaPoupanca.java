@@ -5,13 +5,14 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ContaPoupanca extends Conta {
 
-    private int variacao = 51;
-    private BigDecimal saldo = new BigDecimal(400);
-    private String tipoConta = "Conta Poupança";
+    protected int variacao = 51;
+    protected BigDecimal saldo = new BigDecimal(400);
+    protected String tipoConta = "Conta Poupança";
 
     @Override
     public String getAgencia() {

@@ -2,7 +2,6 @@ package factory;
 
 import dominio.ContaEnum;
 import servico.ContaService;
-import visao.ContaView;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;

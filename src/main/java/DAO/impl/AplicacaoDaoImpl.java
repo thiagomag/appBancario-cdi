@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,8 +25,7 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
 
     @Override
     public void escreverArquivo(Usuario usuario) throws IOException {
-        String nomeLowCase = usuario.getNome().toLowerCase(Locale.ROOT);
-        BufferedWriter bw = Files.newBufferedWriter(Paths.get("usuario-" + nomeLowCase + ".txt"));
+        BufferedWriter bw = Files.newBufferedWriter(Paths.get("dados/usuario-" + usuario.getNome().toLowerCase() + ".txt"));
         bw.write(String.valueOf(usuario));
         bw.flush();
         bw.close();
@@ -35,10 +33,9 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
     }
 
     private void escreverContaArquivo(Usuario usuario) throws IOException {
-        String nomeLowCase = usuario.getNome().toLowerCase(Locale.ROOT);
         contasList = new ArrayList<>();
         contasList.addAll(usuario.getContas());
-        BufferedWriter bw = Files.newBufferedWriter(Paths.get("contas-" + nomeLowCase + ".txt"));
+        BufferedWriter bw = Files.newBufferedWriter(Paths.get("dados/contas-" + usuario.getNome().toLowerCase() + ".txt"));
         for (int i = 0; i < contasList.size(); i++) {
             if (i == contasList.size() - 1) {
                 bw.write(String.valueOf(usuario.getContas().get(i).toString()));
@@ -54,14 +51,14 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
 
     @Override
     public List<Usuario> lerArquivo(String nome) throws IOException {
-        String nomeLowCase = nome.toLowerCase(Locale.ROOT);
-        Path path = Paths.get("usuario-" + nomeLowCase + ".txt");
+        Path path = Paths.get("dados/usuario-" + nome.toLowerCase() + ".txt");
         try (Stream<String> stream = Files.lines(path)) {
             List<String> lines = stream.collect(Collectors.toUnmodifiableList());
             Usuario usuario = new Usuario();
             for (int i = 0; i < lines.size(); i += 3) {
                 usuario.setNome(lines.get(i));
-                usuario.setIdade(Integer.parseInt(lines.get(i + 1)));
+                usuario.setSenha(lines.get(i + 1));
+                usuario.setIdade(Integer.parseInt(lines.get(i + 2)));
             }
             for (Conta conta : lerContaArquivo(nome)){
                 usuario.setContas(conta);
@@ -69,14 +66,13 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
             usuarioList = new ArrayList<>();
             usuarioList.add(usuario);
         } catch (NoSuchFileException e) {
-            System.err.println("Arquivo usuario-" + nomeLowCase + ".txt não existe");
+            System.err.println("Arquivo usuario-" + nome.toLowerCase() + ".txt não existe");
         }
         return usuarioList;
     }
 
     private List<Conta> lerContaArquivo(String nome) throws IOException {
-        String nomeLowCase = nome.toLowerCase(Locale.ROOT);
-        Path path = Paths.get("contas-" + nomeLowCase + ".txt");
+        Path path = Paths.get("dados/contas-" + nome.toLowerCase() + ".txt");
         try (Stream<String> stream = Files.lines(path)) {
             List<String> lines = stream.collect(Collectors.toUnmodifiableList());
             contasList = new ArrayList<>();
@@ -112,7 +108,7 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
                 contasList.add(conta);
             }
         } catch (NoSuchFileException e) {
-            System.err.println("Arquivo usuario-" + nomeLowCase + ".txt não existe");
+            System.err.println("Arquivo usuario-" + nome.toLowerCase() + ".txt não existe");
         }
         return contasList;
     }
