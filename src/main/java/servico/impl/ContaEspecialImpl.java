@@ -5,6 +5,7 @@ import dominio.Conta;
 import dominio.ContaEnum;
 import dominio.ContaEspecial;
 import dominio.Usuario;
+import exceptions.SaldoInsuficienteException;
 import servico.ContaService;
 
 import java.math.BigDecimal;
@@ -33,7 +34,11 @@ public class ContaEspecialImpl implements ContaService {
 
     @Override
     public void sacar(BigDecimal valor, Conta conta) {
-        BigDecimal saldo = ((ContaEspecial) conta).getSaldo().subtract(valor);
-        ((ContaEspecial) conta).setSaldo(saldo);
+        if (valor.compareTo(((ContaEspecial) conta).getSaldo()) < 0) {
+            BigDecimal saldo = ((ContaEspecial) conta).getSaldo().subtract(valor);
+            ((ContaEspecial) conta).setSaldo(saldo);
+        } else {
+            throw new SaldoInsuficienteException();
+        }
     }
 }

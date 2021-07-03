@@ -3,8 +3,10 @@ package servico.impl;
 import annotation.TipoConta;
 import dominio.Conta;
 import dominio.ContaEnum;
+import dominio.ContaPoupanca;
 import dominio.ContaSimples;
 import dominio.Usuario;
+import exceptions.SaldoInsuficienteException;
 import servico.ContaService;
 
 import java.math.BigDecimal;
@@ -32,7 +34,11 @@ public class ContaNormalImpl implements ContaService {
 
     @Override
     public void sacar(BigDecimal valor, Conta conta) {
-        BigDecimal saldo =  ((ContaSimples) conta).getSaldo().subtract(valor);
-        ((ContaSimples) conta).setSaldo(saldo);
+        if (valor.compareTo(((ContaSimples) conta).getSaldo()) < 0) {
+            BigDecimal saldo = ((ContaSimples) conta).getSaldo().subtract(valor);
+            ((ContaSimples) conta).setSaldo(saldo);
+        } else {
+            throw new SaldoInsuficienteException();
+        }
     }
 }

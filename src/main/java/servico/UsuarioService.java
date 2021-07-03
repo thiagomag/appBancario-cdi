@@ -1,7 +1,5 @@
 package servico;
 
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import dominio.Usuario;
 
 import java.io.IOException;

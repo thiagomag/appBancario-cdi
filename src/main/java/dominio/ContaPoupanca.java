@@ -11,6 +11,7 @@ public class ContaPoupanca extends Conta {
 
     private int variacao = 51;
     private BigDecimal saldo = new BigDecimal(400);
+    private String tipoConta = "Conta Poupança";
 
     @Override
     public String getAgencia() {
@@ -24,7 +25,7 @@ public class ContaPoupanca extends Conta {
 
     @Override
     public String toString() {
-        return "ContaPoupanca\n" +
+        return tipoConta + "\n" +
                 agencia + "\n" +
                 numeroConta + "\n" +
                 variacao + "\n" +

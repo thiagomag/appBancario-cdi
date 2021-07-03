@@ -11,6 +11,7 @@ public class ContaEspecial extends Conta{
 
     private int variacao = 10;
     private BigDecimal saldo = new BigDecimal(200);
+    private String tipoConta = "Conta Especial";
 
     @Override
     public int getNumeroConta() {
@@ -24,7 +25,7 @@ public class ContaEspecial extends Conta{
 
     @Override
     public String toString() {
-        return "ContaEspecial\n" +
+        return tipoConta + "\n" +
                 agencia + "\n" +
                 numeroConta + "\n" +
                 variacao + "\n" +

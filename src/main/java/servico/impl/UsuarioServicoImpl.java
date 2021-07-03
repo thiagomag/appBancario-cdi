@@ -1,6 +1,6 @@
 package servico.impl;
 
-import DAO.UsuarioDao;
+import DAO.AplicacaoDao;
 import dominio.Usuario;
 import exceptions.UsuarioNaoExisteException;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class UsuarioServicoImpl implements UsuarioService {
 
 
     @Inject
-    UsuarioDao usuarioDao;
+    AplicacaoDao aplicacaoDao;
 
     @Override
     public Usuario criarUsuario(String nome, int idade) {
@@ -26,8 +26,8 @@ public class UsuarioServicoImpl implements UsuarioService {
 
     @Override
     public Usuario consultarUsuario(String nome) throws IOException {
-        for (Usuario usuario : usuarioDao.lerArquivo(nome)) {
-            if (usuario.getNome().equals(nome)){
+        for (Usuario usuario : aplicacaoDao.lerArquivo(nome)) {
+            if (usuario.getNome().equals(nome)) {
                 return usuario;
             } else {
                 throw new UsuarioNaoExisteException();
@@ -38,6 +38,6 @@ public class UsuarioServicoImpl implements UsuarioService {
 
     @Override
     public void escreverArquivo(Usuario usuario) throws IOException {
-        usuarioDao.escreverArquivo(usuario);
+        aplicacaoDao.escreverArquivo(usuario);
     }
 }

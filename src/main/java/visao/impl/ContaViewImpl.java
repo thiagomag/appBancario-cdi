@@ -6,7 +6,6 @@ import dominio.ContaEspecial;
 import dominio.ContaPoupanca;
 import dominio.ContaSimples;
 import dominio.Usuario;
-import exceptions.ContaNaoExisteException;
 import factory.ContaViewFactory;
 import visao.ContaView;
 
@@ -43,11 +42,13 @@ public class ContaViewImpl implements ContaView {
                 enumType = ContaEnum.POUPANCA;
                 break;
         }
-        return contaViewFactory.create(enumType).criarConta(usuario);
+        Conta conta = contaViewFactory.create(enumType).criarConta(usuario);
+        System.out.printf("A conta criada foi: %s , Numero: %d\n", conta.getTipoConta(), conta.getNumeroConta());
+        return conta;
     }
 
     @Override
-    public void depositar(Usuario usuario, BigDecimal valor, Conta conta) throws ContaNaoExisteException {
+    public void depositar(Usuario usuario, BigDecimal valor, Conta conta) {
         if (conta instanceof ContaEspecial) {
             contaViewFactory.create(ContaEnum.ESPECIAL).depositar(valor, conta);
             System.out.printf("O valor depositado foi de R$ %.2f\nO seu novo saldo é de R$ %.2f\n", valor, ((ContaEspecial) conta).getSaldo());
@@ -82,16 +83,16 @@ public class ContaViewImpl implements ContaView {
             saldo = contaViewFactory.create(ContaEnum.ESPECIAL).saldo(conta);
             BigDecimal limite = new BigDecimal(200);
             if (saldo.compareTo(limite) > 0) {
-                System.out.printf("O saldo da conta %d é R$ %.2f e o limite é R$ %.2f", conta.getNumeroConta(), saldo.subtract(limite), limite);
+                System.out.printf("O saldo da conta %d é R$ %.2f e o limite é R$ %.2f\n", conta.getNumeroConta(), saldo.subtract(limite), limite);
             } else {
-                System.out.printf("O saldo da conta %d é R$ 0,00 e o limite é R$ %.2f", conta.getNumeroConta(), limite);
+                System.out.printf("O saldo da conta %d é R$ 0,00 e o limite é R$ %.2f\n", conta.getNumeroConta(), limite);
             }
         } else if (conta instanceof ContaPoupanca) {
             saldo = contaViewFactory.create(ContaEnum.POUPANCA).saldo(conta);
-            System.out.printf("O saldo da conta %d é R$ %.2f", conta.getNumeroConta(), saldo);
+            System.out.printf("O saldo da conta %d é R$ %.2f\n", conta.getNumeroConta(), saldo);
         } else if (conta instanceof ContaSimples) {
             saldo = contaViewFactory.create(ContaEnum.SIMPLES).saldo(conta);
-            System.out.printf("O saldo da conta %d é R$ %.2f", conta.getNumeroConta(), saldo);
+            System.out.printf("O saldo da conta %d é R$ %.2f\n", conta.getNumeroConta(), saldo);
         }
     }
 }

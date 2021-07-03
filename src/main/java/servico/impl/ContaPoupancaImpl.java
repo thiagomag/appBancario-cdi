@@ -5,6 +5,7 @@ import dominio.Conta;
 import dominio.ContaEnum;
 import dominio.ContaPoupanca;
 import dominio.Usuario;
+import exceptions.SaldoInsuficienteException;
 import servico.ContaService;
 
 import java.math.BigDecimal;
@@ -33,8 +34,12 @@ public class ContaPoupancaImpl implements ContaService {
 
     @Override
     public void sacar(BigDecimal valor, Conta conta) {
-        BigDecimal taxa = ((ContaPoupanca) conta).getSaldo().multiply(BigDecimal.valueOf(0.0007));
-        BigDecimal saldo = ((ContaPoupanca) conta).getSaldo().subtract(valor).subtract(taxa);
-        ((ContaPoupanca) conta).setSaldo(saldo);
+        if (valor.compareTo(((ContaPoupanca) conta).getSaldo()) < 0){
+            BigDecimal taxa = ((ContaPoupanca) conta).getSaldo().multiply(BigDecimal.valueOf(0.0007));
+            BigDecimal saldo = ((ContaPoupanca) conta).getSaldo().subtract(valor).subtract(taxa);
+            ((ContaPoupanca) conta).setSaldo(saldo);
+        } else {
+            throw new SaldoInsuficienteException();
+        }
     }
 }

@@ -1,6 +1,6 @@
 package DAO.impl;
 
-import DAO.UsuarioDao;
+import DAO.AplicacaoDao;
 import dominio.Conta;
 import dominio.ContaEspecial;
 import dominio.ContaPoupanca;
@@ -11,20 +11,23 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class UsuarioDaoImpl implements UsuarioDao {
+public class AplicacaoDaoImpl implements AplicacaoDao {
     List<Usuario> usuarioList;
-    List<Conta> contasList = new ArrayList<>();
+    List<Conta> contasList;
 
     @Override
     public void escreverArquivo(Usuario usuario) throws IOException {
-        BufferedWriter bw = Files.newBufferedWriter(Paths.get("usuario-" + usuario.getNome() + ".txt"));
+        String nomeLowCase = usuario.getNome().toLowerCase(Locale.ROOT);
+        BufferedWriter bw = Files.newBufferedWriter(Paths.get("usuario-" + nomeLowCase + ".txt"));
         bw.write(String.valueOf(usuario));
         bw.flush();
         bw.close();
@@ -32,9 +35,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     private void escreverContaArquivo(Usuario usuario) throws IOException {
+        String nomeLowCase = usuario.getNome().toLowerCase(Locale.ROOT);
         contasList = new ArrayList<>();
         contasList.addAll(usuario.getContas());
-        BufferedWriter bw = Files.newBufferedWriter(Paths.get("contas-" + usuario.getNome() + ".txt"));
+        BufferedWriter bw = Files.newBufferedWriter(Paths.get("contas-" + nomeLowCase + ".txt"));
         for (int i = 0; i < contasList.size(); i++) {
             if (i == contasList.size() - 1) {
                 bw.write(String.valueOf(usuario.getContas().get(i).toString()));
@@ -50,7 +54,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public List<Usuario> lerArquivo(String nome) throws IOException {
-        Path path = Paths.get("usuario-" + nome + ".txt");
+        String nomeLowCase = nome.toLowerCase(Locale.ROOT);
+        Path path = Paths.get("usuario-" + nomeLowCase + ".txt");
         try (Stream<String> stream = Files.lines(path)) {
             List<String> lines = stream.collect(Collectors.toUnmodifiableList());
             Usuario usuario = new Usuario();
@@ -63,19 +68,23 @@ public class UsuarioDaoImpl implements UsuarioDao {
             }
             usuarioList = new ArrayList<>();
             usuarioList.add(usuario);
+        } catch (NoSuchFileException e) {
+            System.err.println("Arquivo usuario-" + nomeLowCase + ".txt não existe");
         }
         return usuarioList;
     }
 
     private List<Conta> lerContaArquivo(String nome) throws IOException {
-        Path path = Paths.get("contas-" + nome + ".txt");
+        String nomeLowCase = nome.toLowerCase(Locale.ROOT);
+        Path path = Paths.get("contas-" + nomeLowCase + ".txt");
         try (Stream<String> stream = Files.lines(path)) {
             List<String> lines = stream.collect(Collectors.toUnmodifiableList());
-            for (int j = 0; j < lines.size(); j += 4) {
+            contasList = new ArrayList<>();
+            for (int j = 0; j < lines.size(); j += 5) {
                 String tipoConta = lines.get(j);
                 Conta conta = null;
                 switch (tipoConta) {
-                    case "ContaSimples": {
+                    case "Conta Simples": {
                         conta = new ContaSimples();
                         conta.setAgencia(lines.get(j + 1));
                         conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
@@ -83,7 +92,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         ((ContaSimples) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
                         break;
                     }
-                    case "ContaEspecial": {
+                    case "Conta Especial": {
                         conta = new ContaEspecial();
                         conta.setAgencia(lines.get(j + 1));
                         conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
@@ -91,7 +100,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         ((ContaEspecial) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
                         break;
                     }
-                    case "ContaPoupanca": {
+                    case "Conta Poupança": {
                         conta = new ContaPoupanca();
                         conta.setAgencia(lines.get(j + 1));
                         conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
@@ -99,11 +108,11 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         ((ContaPoupanca) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
                         break;
                     }
-                } if(conta == null){
-                    break;
                 }
                 contasList.add(conta);
             }
+        } catch (NoSuchFileException e) {
+            System.err.println("Arquivo usuario-" + nomeLowCase + ".txt não existe");
         }
         return contasList;
     }

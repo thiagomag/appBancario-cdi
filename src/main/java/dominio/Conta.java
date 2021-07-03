@@ -6,8 +6,9 @@ import java.util.Random;
 
 @Data
 public abstract class Conta {
-    String agencia;
-    int numeroConta;
+    protected String agencia;
+    protected int numeroConta;
+    protected String tipoConta;
 
     public Conta() {
         Random numero = new Random();
