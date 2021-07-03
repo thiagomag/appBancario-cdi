@@ -1,4 +1,5 @@
 import aplicacao.Aplicacao;
+import exceptions.IdadeNaoPermitidaException;
 import exceptions.SaldoInsuficienteException;
 import exceptions.UsuarioNaoExisteException;
 import org.jboss.weld.environment.se.Weld;
@@ -19,7 +20,7 @@ public class Main {
             System.err.println("Usuário não existe");
         } catch (InputMismatchException e) {
             System.err.println("Informe um valor válido");
-        } catch (SaldoInsuficienteException e){
+        } catch (SaldoInsuficienteException | IdadeNaoPermitidaException e){
             System.err.println(e.getMessage());
         }
     }

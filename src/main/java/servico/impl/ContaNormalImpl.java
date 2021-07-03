@@ -3,9 +3,9 @@ package servico.impl;
 import annotation.TipoConta;
 import dominio.Conta;
 import dominio.ContaEnum;
-import dominio.ContaPoupanca;
 import dominio.ContaSimples;
 import dominio.Usuario;
+import exceptions.IdadeNaoPermitidaException;
 import exceptions.SaldoInsuficienteException;
 import servico.ContaService;
 
@@ -16,9 +16,13 @@ public class ContaNormalImpl implements ContaService {
 
     @Override
     public Conta criarConta(Usuario usuario) {
-        var conta = new ContaSimples();
-        usuario.setContas(conta);
-        return conta;
+        if(usuario.getIdade() >= 12) {
+            var conta = new ContaSimples();
+            usuario.setContas(conta);
+            return conta;
+        } else {
+            throw new IdadeNaoPermitidaException();
+        }
     }
 
     @Override

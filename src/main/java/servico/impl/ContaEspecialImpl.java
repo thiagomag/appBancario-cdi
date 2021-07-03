@@ -5,6 +5,7 @@ import dominio.Conta;
 import dominio.ContaEnum;
 import dominio.ContaEspecial;
 import dominio.Usuario;
+import exceptions.IdadeNaoPermitidaException;
 import exceptions.SaldoInsuficienteException;
 import servico.ContaService;
 
@@ -15,10 +16,14 @@ public class ContaEspecialImpl implements ContaService {
 
     @Override
     public Conta criarConta(Usuario usuario) {
-        var conta = new ContaEspecial();
-        conta.setSaldo(new BigDecimal(600));
-        usuario.setContas(conta);
-        return conta;
+        if(usuario.getIdade() >= 18) {
+            var conta = new ContaEspecial();
+            conta.setSaldo(new BigDecimal(600));
+            usuario.setContas(conta);
+            return conta;
+        } else {
+            throw new IdadeNaoPermitidaException();
+        }
     }
 
     @Override
