@@ -12,7 +12,7 @@ public class ContaPoupanca extends Conta {
 
     protected int variacao = 51;
     protected BigDecimal saldo = new BigDecimal(400);
-    protected String tipoConta = "Conta Poupança";
+    protected String tipoConta = String.valueOf(ContaEnum.POUPANCA);
 
     @Override
     public String getAgencia() {

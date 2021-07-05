@@ -1,6 +1,5 @@
 package dominio;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +11,7 @@ public class ContaEspecial extends Conta{
 
     protected int variacao = 10;
     protected BigDecimal saldo = new BigDecimal(200);
-    protected String tipoConta = "Conta Especial";
+    protected String tipoConta = String.valueOf(ContaEnum.ESPECIAL);
 
     @Override
     public int getNumeroConta() {

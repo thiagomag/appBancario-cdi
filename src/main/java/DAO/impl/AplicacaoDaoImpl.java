@@ -2,6 +2,7 @@ package DAO.impl;
 
 import DAO.AplicacaoDao;
 import dominio.Conta;
+import dominio.ContaEnum;
 import dominio.ContaEspecial;
 import dominio.ContaPoupanca;
 import dominio.ContaSimples;
@@ -60,7 +61,7 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
                 usuario.setSenha(lines.get(i + 1));
                 usuario.setIdade(Integer.parseInt(lines.get(i + 2)));
             }
-            for (Conta conta : lerContaArquivo(nome)){
+            for (Conta conta : lerContaArquivo(nome)) {
                 usuario.setContas(conta);
             }
             usuarioList = new ArrayList<>();
@@ -79,35 +80,29 @@ public class AplicacaoDaoImpl implements AplicacaoDao {
             for (int j = 0; j < lines.size(); j += 5) {
                 String tipoConta = lines.get(j);
                 Conta conta = null;
-                switch (tipoConta) {
-                    case "Conta Simples": {
-                        conta = new ContaSimples();
-                        conta.setAgencia(lines.get(j + 1));
-                        conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
-                        ((ContaSimples) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
-                        ((ContaSimples) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
-                        break;
-                    }
-                    case "Conta Especial": {
-                        conta = new ContaEspecial();
-                        conta.setAgencia(lines.get(j + 1));
-                        conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
-                        ((ContaEspecial) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
-                        ((ContaEspecial) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
-                        break;
-                    }
-                    case "Conta Poupança": {
-                        conta = new ContaPoupanca();
-                        conta.setAgencia(lines.get(j + 1));
-                        conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
-                        ((ContaPoupanca) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
-                        ((ContaPoupanca) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
-                        break;
-                    }
+                if (tipoConta.equals(String.valueOf(ContaEnum.SIMPLES))) {
+                    conta = new ContaSimples();
+                    conta.setAgencia(lines.get(j + 1));
+                    conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
+                    ((ContaSimples) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
+                    ((ContaSimples) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
+                } else if (tipoConta.equals(String.valueOf(ContaEnum.ESPECIAL))) {
+                    conta = new ContaEspecial();
+                    conta.setAgencia(lines.get(j + 1));
+                    conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
+                    ((ContaEspecial) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
+                    ((ContaEspecial) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
+                } else if (tipoConta.equals(String.valueOf(ContaEnum.POUPANCA))) {
+                    conta = new ContaPoupanca();
+                    conta.setAgencia(lines.get(j + 1));
+                    conta.setNumeroConta(Integer.parseInt(lines.get(j + 2)));
+                    ((ContaPoupanca) conta).setVariacao(Integer.parseInt(lines.get(j + 3)));
+                    ((ContaPoupanca) conta).setSaldo(new BigDecimal(lines.get(j + 4)));
                 }
                 contasList.add(conta);
             }
-        } catch (NoSuchFileException e) {
+        } catch (
+                NoSuchFileException e) {
             System.err.println("Arquivo usuario-" + nome.toLowerCase() + ".txt não existe");
         }
         return contasList;

@@ -85,7 +85,7 @@ public class ContaViewImpl implements ContaView {
             if (saldo.compareTo(limite) > 0) {
                 System.out.printf("O saldo da conta %d é R$ %.2f e o limite é R$ %.2f\n", conta.getNumeroConta(), saldo.subtract(limite), limite);
             } else {
-                System.out.printf("O saldo da conta %d é R$ 0,00 e o limite é R$ %.2f\n", conta.getNumeroConta(), limite);
+                System.out.printf("O saldo da conta %d é R$ 0,00 e o limite é R$ %.2f\n", conta.getNumeroConta(), ((ContaEspecial) conta).getSaldo());
             }
         } else if (conta instanceof ContaPoupanca) {
             saldo = contaViewFactory.create(ContaEnum.POUPANCA).saldo(conta);
